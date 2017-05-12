@@ -12,9 +12,14 @@ class Head:
     def train_system(self, event):
         self.middle_frame.pack_forget()
         self.options_frame.pack_forget()
+        self.existing_user_frame.pack_forget()
         self.new_user_frame.pack()
 
-        
+    def test_system(self,event):
+        self.bottom_frame.pack_forget()
+        self.options_frame.pack_forget()
+        self.existing_user_frame.pack()
+
     def __init__(self,master):
         self.master=master
         self.master.title="Face Recognition System"
@@ -63,6 +68,7 @@ class Head:
         self.train_button.pack(side = "left")
         self.test_button = Button(self.options_frame, text = "Login, Existing User",relief = "groove" ,font = ("Helvetica", 15, "bold"), pady=10, padx=10)
         self.test_button.pack(side="right")
+        self.test_button.bind("<Button-1>", self.test_system)
 ## Frame for options, training or testing, ENDS
         
 ## New USER, Registration Code (Frame) starts. Separate frames for user details and all buttons.
@@ -117,6 +123,19 @@ class Head:
         self.train_save = Button(self.train_save_frame, text = "Save Record", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove")
         self.train_save.pack(side = "right")
 ## New USER Registration Code (Frame) ends
+
+## Existing User, Login Code STARTS
+        self.existing_user_frame = Frame(self.main_frame, pady=10)
+        self.details_frame = Frame(self.existing_user_frame, pady=10)
+        self.details_frame.pack(fill=BOTH)
+        self.name_label = Label(self.details_frame, text = "Enter Person's Name:  ", font = ("Helvetica", 12, "bold italic"))
+        self.name_label.pack(side="left")
+        self.name_field = Entry(self.details_frame, font = ("Helvetica", 15, "bold"),relief = "groove")
+        self.name_field.pack(side="right")
+        self.verify = Button(self.existing_user_frame, text = "Verify User", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove")
+        self.verify.pack()
+## Existing User, Login Code ENDS
+        
         
 root = Tk()
 root.resizable(width=False, height=False)
