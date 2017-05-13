@@ -1,0 +1,38 @@
+import ast
+
+with open('sas.txt','r') as inf:
+    dic = eval(inf.read())
+
+
+first={}
+first.update(ast.literal_eval(dic['first']))
+
+second={}
+second.update(ast.literal_eval(dic['second']))
+
+third={}
+third.update(ast.literal_eval(dic['third']))
+
+fourth={}
+fourth.update(ast.literal_eval(dic['fourth']))
+
+fifth={}
+fifth.update(ast.literal_eval(dic['fifth']))
+
+print(third)
+print(fourth)
+avg = {}
+
+for key in first:
+    if key in second:
+        v = abs(first[key] + second[key] + third[key] + fourth[key] + fifth[key])
+        avg[key] = v/5
+
+
+final_dict = {}
+final_dict['avg'] = avg
+dic.update(final_dict)
+
+file_object = open('sas.txt' , 'w+')
+file_object.write((str(dic)))
+file_object.close()
