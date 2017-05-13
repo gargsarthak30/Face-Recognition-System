@@ -1,8 +1,13 @@
 from Tkinter import *
 from PIL import Image, ImageTk
+from combination import combination
+
 
 class Head:
-    
+    def click_first(self, filename, dict_name):
+        c = combination()
+        c.execute(filename, dict_name)
+        
 ## Function for showing options page on button click 
     def options(self,event):
         self.bottom_frame.pack_forget()
@@ -85,7 +90,11 @@ class Head:
         self.train_1_frame.pack(fill = BOTH)
         self.train_1_label = Label(self.train_1_frame, text = "Click First Photo: ", font = ("Helvetica", 12, "bold italic"))
         self.train_1_label.pack(side = "left")
-        self.train_1 = Button(self.train_1_frame, text = "First Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10,relief = "groove")
+        self.dict_name = 'first'
+        self.train_1 = Button(self.train_1_frame, text = "First Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10,relief = "groove", command=lambda: self.click_first(self.new_user_name_field.get(),self.dict_name))
+## Function calling for first training photo
+##        self.dict_name = 'first'
+##        self.train_1.bind("<Button-1>", self.click_first(self.received_entry,self.dict_name))
         self.train_1.pack(side = "right")
 
         self.train_2_frame = Frame(self.new_user_frame, pady=10)
@@ -143,5 +152,6 @@ root.geometry('{}x{}'.format(600,650))
 root.title('Face Recognition System')
 app = Head(root)
 root.mainloop()
+
 
 
