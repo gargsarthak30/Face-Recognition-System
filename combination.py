@@ -1,3 +1,5 @@
+from __future__ import division
+
 from imutils.video import VideoStream
 from imutils import face_utils
 import datetime
@@ -87,53 +89,40 @@ class combination:
             dist = sqrt(dist1)
             self.featureDist.update({'headWidth' : dist})
             
-        def execute_test(self, filename, dict_name):
-                detect = dlib.get_frontal_face_detector() 
-                predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
-
-                vs = VideoStream(-1).start()
-                time.sleep(2.0)
-                self.featureDist = {}
-
-                while 1:
-                    frame = vs.read()
-                    frame = imutils.resize(frame, width=400)
-                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-                    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
-                    clahe_image = clahe.apply(gray)
-                    faces = detect(clahe_image, 0)
-                    for a,b in enumerate(faces):
-                        self.shape = predictor(clahe_image, b)
-                
-                        for i in range(1,68):
-                            cv2.circle(frame, ((self.shape.part(i).x), (self.shape.part(i).y)), 1, (0,0,255), thickness = 1)
-                    
-                        enter_key = cv2.waitKey(1) & 0xFF
-                
-                        if (enter_key == 10):
-                            self.narrowEyebrow()
-                            self.farEyebrow()
-                            self.eyeHeight()
-                            self.noseLength()
-                            self.noseWidth()
-                            self.lipWidth()
-                            self.lipHeight()
-                            self.jawWidth()
-                            self.headWidth()
-                            
-                            self.file_object = open(filename + '.txt' ,"a")
-                            self.final_dict = {}
-                            self.final_dict[dict_name]=self.featureDist
-                            self.file_object.write(json.dumps({self.final_dict}))
-                            self.file_object.close()
-                            enter_key = ord('q')
-                            break
-                            
-                    cv2.imshow("Frame",frame) 
-                    if enter_key == ord('q'):
-                        cv2.destroyAllWindows()
-                        break
         
+        def calculate_average(self,filename):
+                with open(filename + '.txt','a+') as inf:
+                        dic = inf.readlines()
+                dic = ast.literal_eval(json.dumps(dic))
+                self.final_dict = eval(dic[0])
+                self.first={}
+                self.first.update(self.final_dict['first'])
+                self.second={}
+                self.second.update(self.final_dict['second'])
+                self.third={}
+                self.third.update(self.final_dict['third'])
+                self.fourth={}
+                self.fourth.update(self.final_dict['fourth'])
+                self.fifth={}
+                self.fifth.update(self.final_dict['fifth'])
+        
+                self.avg = {}
+
+                for key in self.first:
+
+                    if key in self.second:
+
+                        v = abs(self.first[key] + self.second[key] + self.third[key] + self.fourth[key] + self.fifth[key])
+
+                        self.avg[key] = v/5
+
+                self.output_dict = {}
+                self.output_dict['avg'] = self.avg
+                self.final_dict.update(self.output_dict)
+                self.file_object = open(filename + '.txt' , 'w+')
+                self.file_object.write(str(self.final_dict))
+                self.file_object.close()
+
 
         def execute_train(self, filename, dict_name):
                 detect = dlib.get_frontal_face_detector() 
@@ -192,4 +181,63 @@ class combination:
                         cv2.destroyAllWindows()
                         break
             
-    
+        def execute_test(self, filename):
+                detect = dlib.get_frontal_face_detector() 
+                predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+
+                vs = VideoStream(-1).start()
+                time.sleep(2.0)
+                self.featureDist = {}
+
+                while 1:
+                    frame = vs.read()
+                    frame = imutils.resize(frame, width=400)
+                    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                    clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+                    clahe_image = clahe.apply(gray)
+                    faces = detect(clahe_image, 0)
+                    for a,b in enumerate(faces):
+                        self.shape = predictor(clahe_image, b)
+                
+                        for i in range(1,68):
+                            cv2.circle(frame, ((self.shape.part(i).x), (self.shape.part(i).y)), 1, (0,0,255), thickness = 1)
+                    
+                        enter_key = cv2.waitKey(1) & 0xFF
+                
+                        if (enter_key == 10):
+                            self.narrowEyebrow()
+                            self.farEyebrow()
+                            self.eyeHeight()
+                            self.noseLength()
+                            self.noseWidth()
+                            self.lipWidth()
+                            self.lipHeight()
+                            self.jawWidth()
+                            self.headWidth()
+
+                            with open(filename + '.txt','a+') as inf:
+                                    dic = inf.readlines()
+                                    
+                            dic = ast.literal_eval(json.dumps(dic))
+                            self.final_dict = eval(dic[0])
+                            self.avg={}
+                            self.avg.update(self.final_dict['avg'])
+                            summation=0
+                            result={}
+                            all_keys = set(self.avg.keys() + self.featureDist.keys())
+                            for key in all_keys:
+                                    if key in self.avg and key in self.featureDist:
+                                            v = (abs(self.avg[key] - self.featureDist[key])/self.avg[key])*100
+                                            summation += (100 - v)
+                                            result[key] = 100 - v
+                            summation /= len(all_keys)
+                            print(summation)
+                            enter_key = ord('q')
+                            break
+                            
+                    cv2.imshow("Frame",frame) 
+                    if enter_key == ord('q'):
+                        vs.stop()
+                        cv2.destroyAllWindows()
+                        break
+                

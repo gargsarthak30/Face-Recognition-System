@@ -1,17 +1,29 @@
 from Tkinter import *
 from PIL import Image, ImageTk
 from combination import combination
+from tkMessageBox import showinfo
 
 
 class Head:
-    def click_first(self, filename, dict_name):
+    def test_user(self, filename):
         c = combination()
-        c.execute(filename, dict_name)
+        c.execute_test(filename)
+    
+    def save_record(self,filename):
+        c = combination()
+        c.calculate_average(filename)
+        showinfo("Save Status", "Your data has been successfully stored in our database.")
+        
+    def click_save(self, filename, dict_name):
+        c = combination()
+        c.execute_train(filename, dict_name)
+        
         
 ## Function for showing options page on button click 
     def options(self,event):
         self.bottom_frame.pack_forget()
         self.options_frame.pack()
+
 
 ## Function for showing training page, New user registration
     def train_system(self, event):
@@ -90,46 +102,45 @@ class Head:
         self.train_1_frame.pack(fill = BOTH)
         self.train_1_label = Label(self.train_1_frame, text = "Click First Photo: ", font = ("Helvetica", 12, "bold italic"))
         self.train_1_label.pack(side = "left")
-        self.dict_name = 'first'
-        self.train_1 = Button(self.train_1_frame, text = "First Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10,relief = "groove", command=lambda: self.click_first(self.new_user_name_field.get(),self.dict_name))
-## Function calling for first training photo
-##        self.dict_name = 'first'
-##        self.train_1.bind("<Button-1>", self.click_first(self.received_entry,self.dict_name))
+        self.train_1 = Button(self.train_1_frame, text = "First Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10,relief = "groove", command=lambda: self.click_save(self.new_user_name_field.get(),'first'))
         self.train_1.pack(side = "right")
 
+## Function calling for first training photo
+        
         self.train_2_frame = Frame(self.new_user_frame, pady=10)
         self.train_2_frame.pack(fill = BOTH)
         self.train_2_label = Label(self.train_2_frame, text = "Click Second Photo: ", font = ("Helvetica", 12, "bold italic"))
         self.train_2_label.pack(side = "left")
-        self.train_2 = Button(self.train_2_frame, text = "Second Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove")
+        self.train_2 = Button(self.train_2_frame, text = "Second Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove", command=lambda: self.click_save(self.new_user_name_field.get(),'second'))
         self.train_2.pack(side = "right")
 
         self.train_3_frame = Frame(self.new_user_frame, pady=10)
         self.train_3_frame.pack(fill = BOTH)
         self.train_3_label = Label(self.train_3_frame, text = "Click Third Photo: ", font = ("Helvetica", 12, "bold italic"))
         self.train_3_label.pack(side = "left")
-        self.train_3 = Button(self.train_3_frame, text = "Third Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove")
+        self.train_3 = Button(self.train_3_frame, text = "Third Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove", command=lambda: self.click_save(self.new_user_name_field.get(),'third'))
         self.train_3.pack(side = "right")
 
         self.train_4_frame = Frame(self.new_user_frame, pady=10)
         self.train_4_frame.pack(fill = BOTH)
         self.train_4_label = Label(self.train_4_frame, text = "Click Fourth Photo: ", font = ("Helvetica", 12, "bold italic"))
         self.train_4_label.pack(side = "left")
-        self.train_4 = Button(self.train_4_frame, text = "Fourth Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove")
+        self.train_4 = Button(self.train_4_frame, text = "Fourth Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove",command=lambda: self.click_save(self.new_user_name_field.get(),'fourth'))
         self.train_4.pack(side = "right")
 
         self.train_5_frame = Frame(self.new_user_frame, pady=10)
         self.train_5_frame.pack(fill = BOTH)
         self.train_5_label = Label(self.train_5_frame, text = "Click Fifth Photo: ", font = ("Helvetica", 12, "bold italic"))
         self.train_5_label.pack(side = "left")
-        self.train_5 = Button(self.train_5_frame, text = "Fifth Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove")
+        self.train_5 = Button(self.train_5_frame, text = "Fifth Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove", command=lambda: self.click_save(self.new_user_name_field.get(),'fifth'))
         self.train_5.pack(side = "right")
 
         self.train_save_frame = Frame(self.new_user_frame, pady=10)
         self.train_save_frame.pack(fill = BOTH)
         self.train_save_label = Label(self.train_save_frame, text = "Save User's Record: ", font = ("Helvetica", 12, "bold italic"))
         self.train_save_label.pack(side = "left")
-        self.train_save = Button(self.train_save_frame, text = "Save Record", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove")
+        
+        self.train_save = Button(self.train_save_frame, text = "Save Record", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove", command=lambda: self.save_record(self.new_user_name_field.get()))
         self.train_save.pack(side = "right")
 ## New USER Registration Code (Frame) ends
 
@@ -141,7 +152,7 @@ class Head:
         self.name_label.pack(side="left")
         self.name_field = Entry(self.details_frame, font = ("Helvetica", 15, "bold"),relief = "groove")
         self.name_field.pack(side="right")
-        self.verify = Button(self.existing_user_frame, text = "Verify User", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove")
+        self.verify = Button(self.existing_user_frame, text = "Verify User", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove", command=lambda: self.test_user(self.name_field.get()))
         self.verify.pack()
 ## Existing User, Login Code ENDS
         
