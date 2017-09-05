@@ -203,7 +203,7 @@ class combination:
                             cv2.circle(frame, ((self.shape.part(i).x), (self.shape.part(i).y)), 1, (0,0,255), thickness = 1)
                     
                         enter_key = cv2.waitKey(1) & 0xFF
-                
+                        summation=0
                         if (enter_key == 10):
                             self.narrowEyebrow()
                             self.farEyebrow()
@@ -231,7 +231,6 @@ class combination:
                                             summation += (100 - v)
                                             result[key] = 100 - v
                             summation /= len(all_keys)
-                            print(summation)
                             enter_key = ord('q')
                             break
                             
@@ -239,5 +238,6 @@ class combination:
                     if enter_key == ord('q'):
                         vs.stop()
                         cv2.destroyAllWindows()
-                        break
+                        return summation
+                        
                 
