@@ -7,8 +7,12 @@ from tkMessageBox import showinfo
 class Head:
     def test_user(self, filename):
         c = combination()
-        c.execute_test(filename)
-    
+        answer = c.execute_test(filename)
+        if answer > 85:
+            showinfo("Result","Matching Successfull!! Your face matched with an accuracy of {}".format(answer))
+        else:
+            showinfo("Result", "Sorry, but it seems our system fails to recognise you. Please login with your own id.")
+
     def save_record(self,filename):
         c = combination()
         c.calculate_average(filename)
@@ -87,7 +91,8 @@ class Head:
         self.test_button.pack(side="right")
         self.test_button.bind("<Button-1>", self.test_system)
 ## Frame for options, training or testing, ENDS
-        
+        self.back_button = Button(self.main_frame, text = "Exit",relief = "groove" ,font = ("Helvetica", 15, "bold"), pady=10, command = self.master.destroy)
+        self.back_button.pack(side = "bottom")
 ## New USER, Registration Code (Frame) starts. Separate frames for user details and all buttons.
         self.new_user_frame = Frame(self.main_frame, pady=10)
 
@@ -104,8 +109,6 @@ class Head:
         self.train_1_label.pack(side = "left")
         self.train_1 = Button(self.train_1_frame, text = "First Photo", font = ("Helvetica", 15, "bold"), pady=5, padx=10,relief = "groove", command=lambda: self.click_save(self.new_user_name_field.get(),'first'))
         self.train_1.pack(side = "right")
-
-## Function calling for first training photo
         
         self.train_2_frame = Frame(self.new_user_frame, pady=10)
         self.train_2_frame.pack(fill = BOTH)
@@ -142,6 +145,9 @@ class Head:
         
         self.train_save = Button(self.train_save_frame, text = "Save Record", font = ("Helvetica", 15, "bold"), pady=5, padx=10, relief = "groove", command=lambda: self.save_record(self.new_user_name_field.get()))
         self.train_save.pack(side = "right")
+
+        self.note_label = Label(self.new_user_frame, text = "*Please make sure you click photos with same pose to get the best results.", font = ("Helvetica", 12, "bold italic"), pady=10, borderwidth=2, relief="solid")
+        self.note_label.pack(side = "bottom")
 ## New USER Registration Code (Frame) ends
 
 ## Existing User, Login Code STARTS
